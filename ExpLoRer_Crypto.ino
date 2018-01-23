@@ -37,7 +37,7 @@ void setup()
     showResult(atcab_write_ecc_config_zone(config_data));
   }
   else {
-    debugSerial.println("Skipping configuration zone write");
+    debugSerial.println("Writing configuration zone:...SKIPPED");
   }
 
   //Read back configuration
@@ -46,7 +46,7 @@ void setup()
   showResult(atcab_read_ecc_config_zone(read_data));
 
   //Compare the configuration data, skip first 16 bytes
-  debugSerial.print("Comparing configuration data (expect 0..14, 87 to not match):...");
+  debugSerial.print("Comparing configuration data (expect 0..14, 87 not to match):...");
   compareArrays(config_data, read_data, ATCA_CONFIG_SIZE);
 
   //Lock the configuration zone, if unlocked (can only be done once)
@@ -56,7 +56,7 @@ void setup()
     showResult(atcab_lock_config_zone(&lockResponse));
   }
   else {
-    debugSerial.println("Skipping configuration zone lock");
+    debugSerial.println("Locking configuration zone:...SKIPPED");
   }
 
   //TRNG test
@@ -102,7 +102,7 @@ void compareArrays(uint8_t* array1, uint8_t* array2, uint8_t len)
     debugSerial.println("EQUAL");
   }
   else {
-    debugSerial.println("NOT EQUAL (indices shown)");
+    debugSerial.println("SHOWN INDICIES ARE NOT EQUAL");
   }
 }
 
