@@ -29,10 +29,10 @@ uint8_t config_data[ATCA_CONFIG_SIZE] = {
   //Slots 4-7 Public ECC:   0000-0000-0-0-0-0-0000
   //Slots 8-15 Non-ECC:     0000-0000-0-0-0-0-0000
     
-  0x00, 0x00,                   // Bytes 20..21:  Slot 0 Config
-  0x00, 0x00,                   // Bytes 22..23:  Slot 1 Config
-  0x00, 0x00,                   // Bytes 24..25:  Slot 2 Config
-  0x00, 0x00,                   // Bytes 26..27:  Slot 3 Config
+  0x84, 0x20,                   // Bytes 20..21:  Slot 0 Config
+  0x84, 0x60,                   // Bytes 22..23:  Slot 1 Config
+  0x84, 0x60,                   // Bytes 24..25:  Slot 2 Config
+  0x84, 0x60,                   // Bytes 26..27:  Slot 3 Config
   0x00, 0x00,                   // Bytes 28..29:  Slot 4 Config
   0x00, 0x00,                   // Bytes 30..31:  Slot 5 Config
   0x00, 0x00,                   // Bytes 32..33:  Slot 6 Config
