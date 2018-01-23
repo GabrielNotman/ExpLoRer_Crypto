@@ -25,7 +25,7 @@ void setup()
   showResult(atcab_init(gCfg));
 
   //Read serial number
-  uint8_t serial_num[9];
+  uint8_t serial_num[ATCA_SERIAL_NUM_SIZE];
   debugSerial.print("Reading serial number:...");
   showResult(atcab_read_serial_number(serial_num));
   printHex(serial_num, sizeof(serial_num), sizeof(serial_num));
