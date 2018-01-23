@@ -56,15 +56,22 @@ void setup()
     showResult(atcab_lock_config_zone(&lockResponse));
   }
 
-  //Lock config
-  //Lock Datazones
+  //TRNG test
+  uint8_t random_num[32];
+  debugSerial.print("Requesting TRNG:...");
+  showResult(atcab_random(random_num));
+  printHex(random_num, sizeof(random_num), 16);
 
+  //Query Serial number and other info
+  
   //Generate Private Key
   //Query Public Key
   //Print Public Key
 
   //Request Other Public Key
   //Convert from Base64 and then back to test
+
+  //Skip Lock Datazones
 
   //Generate Shared Secret
   //Run AES on test Message
