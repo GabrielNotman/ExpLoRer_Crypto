@@ -77,7 +77,7 @@ void setup()
   showResult(atcab_random(random_num));
   printHex(random_num, sizeof(random_num), 16);
   
-  //Generate Private Key
+  //Generate private key in slot 0
   uint8_t pub_key_slot0[ATCA_PUB_KEY_SIZE];
   debugSerial.print("Generating private key in slot0:...");
   showResult(atcab_genkey(0, pub_key_slot0));
