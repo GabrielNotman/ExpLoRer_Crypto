@@ -55,6 +55,9 @@ void setup()
     debugSerial.print("Locking configuration zone:...");
     showResult(atcab_lock_config_zone(&lockResponse));
   }
+  else {
+    debugSerial.println("Skipping configuration zone lock");
+  }
 
   //TRNG test
   uint8_t random_num[32];
