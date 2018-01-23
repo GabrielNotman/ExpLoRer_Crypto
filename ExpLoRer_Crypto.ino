@@ -46,8 +46,8 @@ void setup()
   showResult(atcab_read_ecc_config_zone(read_data));
 
   //Compare the configuration data, skip first 16 bytes
-  debugSerial.print("Comparing configuration data:...");
-  compareArrays(&config_data[16], &read_data[16], ATCA_CONFIG_SIZE - 16);
+  debugSerial.print("Comparing configuration data (expect 0..14, 87 to not match):...");
+  compareArrays(config_data, read_data, ATCA_CONFIG_SIZE);
 
   //Lock the configuration zone, if unlocked (can only be done once)
   if (!isLocked) {
