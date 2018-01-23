@@ -1,4 +1,5 @@
 #include "atca_basic.h"
+#include "test_config.h"
 
 ATCAIfaceCfg *gCfg = &cfg_ateccx08a_i2c_default;
 
@@ -16,6 +17,9 @@ void setup()
   // Start debug stream
   debugSerial.begin(debugBaud);
   debugSerial.println("Starting...");
+  
+  debugSerial.println("Test Config:");
+  printHex(config_data, sizeof(config_data));
 
   //Init chip
   //Write config
@@ -43,4 +47,23 @@ void setup()
 
 void loop() 
 {
+}
+
+void printHex(const uint8_t* array, uint8_t len)
+{
+    debugSerial.print(String("Length = ") + String(len,DEC));
+    char strA[3];
+    for (byte i = 0; i < len; i++)
+    {
+        if (i % 4 == 0)
+        {
+            sprintf(strA,"%03d",i);
+            debugSerial.println();
+            debugSerial.print(String(strA) + ": ");
+        }
+        sprintf(strA,"%02X ",array[i]);
+        debugSerial.print(strA);
+        
+    }
+    debugSerial.println();
 }
