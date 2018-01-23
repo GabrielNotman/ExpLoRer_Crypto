@@ -83,6 +83,11 @@ void setup()
   showResult(atcab_genkey(0, pub_key_slot0));
   debugSerial.println("Responded with public key:");
   printHex(pub_key_slot0, sizeof(pub_key_slot0), 16);
+
+  //Query public key from slot 0
+  debugSerial.print("Querying public key from secret key in slot 0:...");
+  showResult(atcab_get_pubkey(0, pub_key_slot0));
+  printHex(pub_key_slot0, sizeof(pub_key_slot0), 16);
     
   
   //Query Public Key
