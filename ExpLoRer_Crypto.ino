@@ -48,11 +48,13 @@ void setup()
   //Compare the configuration data, skip first 16 bytes
   debugSerial.print("Comparing configuration data:...");
   compareArrays(&config_data[16], &read_data[16], ATCA_CONFIG_SIZE - 16);
-  
 
-  //Write config
-  //Read back config
-  //Test config
+  //Lock the configuration zone, if unlocked (can only be done once)
+  if (!isLocked) {
+    uint8_t lockResponse = 0;
+    debugSerial.print("Locking configuration zone:...");
+    showResult(atcab_lock_config_zone(&lockResponse));
+  }
 
   //Lock config
   //Lock Datazones
