@@ -7,7 +7,6 @@ ATCAIfaceCfg *gCfg = &cfg_ateccx08a_i2c_default;
 #define debugBaud 57600
 #define debugDelay 10000
 
-
 void setup() 
 {
   while ((!debugSerial) && (millis() < debugDelay)){
@@ -19,7 +18,7 @@ void setup()
   debugSerial.println("Starting...");
   
   debugSerial.println("Test Config:");
-  printHex(config_data, sizeof(config_data));
+  printHex(config_data, sizeof(config_data), 4);
 
   //Init chip
   //Write config
@@ -49,13 +48,13 @@ void loop()
 {
 }
 
-void printHex(const uint8_t* array, uint8_t len)
+void printHex(const uint8_t* array, uint8_t len, uint8_t width)
 {
     debugSerial.print(String("Length = ") + String(len,DEC));
     char strA[3];
     for (byte i = 0; i < len; i++)
     {
-        if (i % 4 == 0)
+        if (i % width == 0)
         {
             sprintf(strA,"%03d",i);
             debugSerial.println();
