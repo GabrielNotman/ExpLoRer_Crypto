@@ -30,6 +30,12 @@ void setup()
   showResult(atcab_read_serial_number(serial_num));
   printHex(serial_num, sizeof(serial_num), sizeof(serial_num));
 
+  //Read revision information
+  uint8_t rev_info[4];
+  debugSerial.print("Reading revision info:...");
+  showResult(atcab_info(serial_num));
+  printHex(rev_info, sizeof(rev_info), sizeof(rev_info));
+
   //Read configuration lock status
   bool isLocked = false;
   debugSerial.print("Reading configuration lock status:...");
