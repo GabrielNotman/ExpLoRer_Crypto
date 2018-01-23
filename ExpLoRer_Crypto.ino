@@ -17,10 +17,30 @@ void setup()
   debugSerial.begin(debugBaud);
   debugSerial.println("Starting...");
   
-  debugSerial.println("Test Config:");
-  printHex(config_data, sizeof(config_data), 4);
+  //debugSerial.println("Test Config:");
+  //printHex(config_data, sizeof(config_data), 4);
 
   //Init chip
+  debugSerial.print("Initialising ATECC508A:...");
+  showResult(atcab_init(gCfg));
+
+  //Read configuration lock status
+  bool isLocked = false;
+  debugSerial.print("Reading configuration lock status:...");
+  showResult(atcab_is_locked(LOCK_ZONE_CONFIG, &isLocked));
+  debugSerial.print("The configuration zone is ");
+  debugSerial.println((isLocked ? "locked" : "unlocked"));
+  
+  //Write config if unlocked
+  if (!isLocked) {
+    debugSerial.print("Writing configuration zone:...");
+    showResult(atcab_write_ecc_config_zone(config_data));
+  }
+  else {
+    debugSerial.println("Skipping configuration zone write");
+  }
+  
+
   //Write config
   //Read back config
   //Test config
