@@ -24,6 +24,12 @@ void setup()
   debugSerial.print("Initialising ATECC508A:...");
   showResult(atcab_init(gCfg));
 
+  //Read serial number
+  uint8_t serial_num[9];
+  debugSerial.print("Reading serial number:...");
+  showResult(atcab_read_serial_number(serial_num));
+  printHex(serial_num, sizeof(serial_num), sizeof(serial_num));
+
   //Read configuration lock status
   bool isLocked = false;
   debugSerial.print("Reading configuration lock status:...");
