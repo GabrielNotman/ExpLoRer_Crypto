@@ -114,15 +114,13 @@ void compareArrays(uint8_t* array1, uint8_t* array2, uint8_t len)
 
 void printHex(const uint8_t* array, uint8_t len, uint8_t width)
 {
-    debugSerial.print(String("Length = ") + String(len,DEC));
     char strA[3];
-    for (byte i = 0; i < len; i++)
+    for (uint8_t i = 0; i < len; i++)
     {
         if (i % width == 0)
         {
             sprintf(strA,"%03d",i);
-            debugSerial.println();
-            debugSerial.print(String(strA) + ": ");
+            debugSerial.print(String((i == 0 ? "" : "\r\n")) + String(strA) + ": ");
         }
         sprintf(strA,"%02X ",array[i]);
         debugSerial.print(strA);
