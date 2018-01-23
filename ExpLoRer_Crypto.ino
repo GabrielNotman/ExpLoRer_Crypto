@@ -76,10 +76,15 @@ void setup()
   debugSerial.print("Requesting TRNG:...");
   showResult(atcab_random(random_num));
   printHex(random_num, sizeof(random_num), 16);
-
-  //Query Serial number and other info
   
   //Generate Private Key
+  uint8_t pub_key_slot0[ATCA_PUB_KEY_SIZE];
+  debugSerial.print("Generating private key in slot0:...");
+  showResult(atcab_genkey(0, pub_key_slot0));
+  debugSerial.println("Responded with public key:");
+  printHex(pub_key_slot0, sizeof(pub_key_slot0), 16);
+    
+  
   //Query Public Key
   //Print Public Key
 
