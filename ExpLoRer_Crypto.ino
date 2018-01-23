@@ -16,6 +16,7 @@ void setup()
   // Start debug stream
   debugSerial.begin(debugBaud);
   debugSerial.println("Starting...");
+  debugSerial.println();
   
   //debugSerial.println("Test Config:");
   //printHex(config_data, sizeof(config_data), 4);
@@ -23,18 +24,21 @@ void setup()
   //Init chip
   debugSerial.print("Initialising ATECC508A:...");
   showResult(atcab_init(gCfg));
+  debugSerial.println();
 
   //Read serial number
   uint8_t serial_num[ATCA_SERIAL_NUM_SIZE];
   debugSerial.print("Reading serial number:...");
   showResult(atcab_read_serial_number(serial_num));
   printHex(serial_num, sizeof(serial_num), sizeof(serial_num));
+  debugSerial.println();
 
   //Read revision information
   uint8_t rev_info[4];
   debugSerial.print("Reading revision info:...");
   showResult(atcab_info(serial_num));
   printHex(rev_info, sizeof(rev_info), sizeof(rev_info));
+  debugSerial.println();
 
   //Read configuration lock status
   bool isLocked = false;
@@ -42,6 +46,7 @@ void setup()
   showResult(atcab_is_locked(LOCK_ZONE_CONFIG, &isLocked));
   debugSerial.print("The configuration zone is ");
   debugSerial.println((isLocked ? "locked" : "unlocked"));
+  debugSerial.println();
   
   //Write config if unlocked
   if (!isLocked) {
@@ -51,15 +56,18 @@ void setup()
   else {
     debugSerial.println("Writing configuration zone:...SKIPPED");
   }
+  debugSerial.println();
 
   //Read back configuration
   uint8_t read_data[ATCA_CONFIG_SIZE];
   debugSerial.print("Reading configuration zone:...");
   showResult(atcab_read_ecc_config_zone(read_data));
+  debugSerial.println();
 
   //Compare the configuration data, skip first 16 bytes
   debugSerial.print("Comparing configuration data (expect 0..14, 87 not to match):...");
   compareArrays(config_data, read_data, ATCA_CONFIG_SIZE);
+  debugSerial.println();
 
   //Lock the configuration zone, if unlocked (can only be done once)
   if (!isLocked) {
@@ -70,12 +78,14 @@ void setup()
   else {
     debugSerial.println("Locking configuration zone:...SKIPPED");
   }
+  debugSerial.println();
 
   //TRNG test
   uint8_t random_num[32];
   debugSerial.print("Requesting TRNG:...");
   showResult(atcab_random(random_num));
   printHex(random_num, sizeof(random_num), 16);
+  debugSerial.println();
   
   //Generate private key in slot 0
   uint8_t pub_key_slot0[ATCA_PUB_KEY_SIZE];
@@ -83,11 +93,13 @@ void setup()
   showResult(atcab_genkey(0, pub_key_slot0));
   debugSerial.println("Responded with public key:");
   printHex(pub_key_slot0, sizeof(pub_key_slot0), 16);
+  debugSerial.println();
 
   //Query public key from slot 0
   debugSerial.print("Querying public key from secret key in slot 0:...");
   showResult(atcab_get_pubkey(0, pub_key_slot0));
   printHex(pub_key_slot0, sizeof(pub_key_slot0), 16);
+  debugSerial.println();
     
   
   //Query Public Key
