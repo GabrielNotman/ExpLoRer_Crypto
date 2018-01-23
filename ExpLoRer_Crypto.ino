@@ -39,6 +39,15 @@ void setup()
   else {
     debugSerial.println("Skipping configuration zone write");
   }
+
+  //Read back configuration
+  uint8_t read_data[ATCA_CONFIG_SIZE];
+  debugSerial.print("Reading configuration zone:...");
+  showResult(atcab_read_ecc_config_zone(read_data));
+
+  //Compare the configuration data, skip first 16 bytes
+  debugSerial.print("Comparing configuration data:...");
+  compareArrays(&config_data[16], &read_data[16], ATCA_CONFIG_SIZE - 16);
   
 
   //Write config
@@ -66,6 +75,23 @@ void setup()
 
 void loop() 
 {
+}
+
+void compareArrays(uint8_t* array1, uint8_t* array2, uint8_t len)
+{
+  bool equal = true;
+  for (uint8_t i = 0; i < len; i++) {
+    if (array1[i] != array2[i]) {
+      equal = false;
+      debugSerial.print(String(i, DEC) + String(", "));
+    }
+  }
+  if (equal) {
+    debugSerial.println("EQUAL");
+  }
+  else {
+    debugSerial.println("NOT EQUAL (indices shown)");
+  }
 }
 
 void printHex(const uint8_t* array, uint8_t len, uint8_t width)
