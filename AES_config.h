@@ -22,7 +22,7 @@
 #include <stdint.h>
 #include <string.h>
 
-#if defined(__ARDUINO_X86__) || (defined (__linux) || defined (linux))
+#if defined(__ARDUINO_X86__) || (defined (__linux) || defined (linux) || defined (ARDUINO_ARCH_SAMD))
 	#undef PROGMEM
 	#define PROGMEM __attribute__(( section(".progmem.data") ))
 	#define pgm_read_byte(p) (*(p))
