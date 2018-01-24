@@ -119,15 +119,32 @@ void setup()
   showResult(atcab_get_pubkey(0, pub_key_slot0));
   printHex(pub_key_slot0, sizeof(pub_key_slot0), 16);
   debugSerial.println();
-    
-  
-  //Query Public Key
-  //Print Public Key
 
   //Request Other Public Key
   //Convert from Base64 and then back to test
 
-  //Skip Lock Datazones
+  //Generate private key in slot 1
+  uint8_t pub_key_slot1[ATCA_PUB_KEY_SIZE];
+  debugSerial.print("Generating private key in slot1:...");
+  showResult(atcab_genkey(1, pub_key_slot1));
+  debugSerial.println("Responded with public key:");
+  printHex(pub_key_slot1, sizeof(pub_key_slot1), 16);
+  debugSerial.println();
+
+  //Generate shared secret 0 -> 1
+  uint8_t shared_sec[ATCA_KEY_SIZE];
+  memset(shared_sec, 0, sizeof(shared_sec));
+  debugSerial.print("Generating shared secret 0->1:...");
+  showResult(atcab_ecdh(0, pub_key_slot1, shared_sec));
+  printHex(shared_sec, sizeof(shared_sec), 16);
+  debugSerial.println();
+
+  //Generate shared secret 1 -> 0
+  memset(shared_sec, 0, sizeof(shared_sec));
+  debugSerial.print("Generating shared secret 1->0:...");
+  showResult(atcab_ecdh(1, pub_key_slot0, shared_sec));
+  printHex(shared_sec, sizeof(shared_sec), 16);
+  debugSerial.println();
 
   //Generate Shared Secret
   //Run AES on test Message
