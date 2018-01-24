@@ -80,6 +80,25 @@ void setup()
   }
   debugSerial.println();
 
+  //Read data zone lock status
+  isLocked = false;
+  debugSerial.print("Reading data zone lock status:...");
+  showResult(atcab_is_locked(LOCK_ZONE_DATA, &isLocked));
+  debugSerial.print("The data zone is ");
+  debugSerial.println((isLocked ? "locked" : "unlocked"));
+  debugSerial.println();
+  
+  //Lock data zone if unlocked
+  if (!isLocked) {
+    uint8_t lockResponse = 0;
+    debugSerial.print("Locking data zone:...");
+    showResult(atcab_lock_data_zone(&lockResponse));
+  }
+  else {
+    debugSerial.println("Locking data zone:...SKIPPED");
+  }
+  debugSerial.println();
+
   //TRNG test
   uint8_t random_num[32];
   debugSerial.print("Requesting TRNG:...");
