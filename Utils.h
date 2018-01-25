@@ -26,6 +26,8 @@
 #define HEX_CHAR_TO_NIBBLE(c) ((c >= 'A') ? (c - 'A' + 0x0A) : (c - '0'))
 #define HEX_PAIR_TO_BYTE(h, l) ((HEX_CHAR_TO_NIBBLE(h) << 4) + HEX_CHAR_TO_NIBBLE(l))
 
+#define IS_HEX_CHAR(c) ( (((c >= 'A') && (c <= 'F')) || ((c >= '0') && (c <= '9'))) ? true : false)
+
 #define ARRAY_SIZE(a) (sizeof(a)/sizeof(a[0]))
 
 #endif
