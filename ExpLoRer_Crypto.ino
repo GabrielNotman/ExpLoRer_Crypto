@@ -133,30 +133,14 @@ void setup()
   debugSerial.println(String("Recieved length: ") + String(readLen, DEC));
   debugSerial.println();
 
-  //Generate private key in slot 1
-  uint8_t pub_key_slot1[ATCA_PUB_KEY_SIZE];
-  debugSerial.print("Generating private key in slot1:...");
-  showResult(atcab_genkey(1, pub_key_slot1));
-  debugSerial.println("Responded with public key:");
-  printHex(pub_key_slot1, sizeof(pub_key_slot1), 16);
-  debugSerial.println();
-
-  //Generate shared secret 0 -> 1
+  //Generate shared secret 0 -> external
   uint8_t shared_sec[ATCA_KEY_SIZE];
   memset(shared_sec, 0, sizeof(shared_sec));
-  debugSerial.print("Generating shared secret 0->1:...");
-  showResult(atcab_ecdh(0, pub_key_slot1, shared_sec));
-  printHex(shared_sec, sizeof(shared_sec), 16);
+  debugSerial.print("Generating shared secret 0->external:...");
+  showResult(atcab_ecdh(0, pub_key_ext, shared_sec));
+  printRawHex(shared_sec, sizeof(shared_sec));
   debugSerial.println();
 
-  //Generate shared secret 1 -> 0
-  memset(shared_sec, 0, sizeof(shared_sec));
-  debugSerial.print("Generating shared secret 1->0:...");
-  showResult(atcab_ecdh(1, pub_key_slot0, shared_sec));
-  printHex(shared_sec, sizeof(shared_sec), 16);
-  debugSerial.println();
-
-  //Generate Shared Secret
   //Run AES on test Message
   //Output AES encrypted Message as base64
   
