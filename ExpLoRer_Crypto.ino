@@ -1,5 +1,6 @@
 #include "atca_basic.h"
 #include "test_config.h"
+#include "Utils.h"
 
 ATCAIfaceCfg *gCfg = &cfg_ateccx08a_i2c_default;
 
@@ -189,6 +190,16 @@ void printHex(const uint8_t* buff, uint8_t len, uint8_t width)
         sprintf(strA,"%02X ",buff[i]);
         debugSerial.print(strA);
         
+    }
+    debugSerial.println();
+}
+
+void printRawHex(const uint8_t* buff, uint8_t len, uint8_t width)
+{
+    for (uint8_t i = 0; i < len; i++)
+    {
+      debugSerial.print((char)NIBBLE_TO_HEX_CHAR(HIGH_NIBBLE(buff[i])));
+      debugSerial.print((char)NIBBLE_TO_HEX_CHAR(LOW_NIBBLE(buff[i])));
     }
     debugSerial.println();
 }
