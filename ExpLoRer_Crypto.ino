@@ -194,7 +194,7 @@ void printHex(const uint8_t* buff, uint8_t len, uint8_t width)
     debugSerial.println();
 }
 
-void printRawHex(const uint8_t* buff, uint8_t len, uint8_t width)
+void printRawHex(const uint8_t* buff, uint8_t len)
 {
     for (uint8_t i = 0; i < len; i++)
     {
