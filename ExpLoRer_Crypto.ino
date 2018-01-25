@@ -8,6 +8,8 @@ ATCAIfaceCfg *gCfg = &cfg_ateccx08a_i2c_default;
 #define debugBaud 57600
 #define debugDelay 10000
 
+#define LINE_TIMEOUT 30000
+
 void setup() 
 {
   while ((!debugSerial) && (millis() < debugDelay)){
@@ -202,6 +204,46 @@ void printRawHex(const uint8_t* buff, uint8_t len)
       debugSerial.print((char)NIBBLE_TO_HEX_CHAR(LOW_NIBBLE(buff[i])));
     }
     debugSerial.println();
+}
+
+uint16_t readLn(uint8_t* buff, uint16_t buffLen)
+{
+  int16_t resultLen = 0;
+  resultLen = 0;
+  bool seenCR = false;
+  
+  //Timeout function
+  int32_t timeOut = millis() + LINE_TIMEOUT;
+  while ((millis() < timeOut) && (!seenCR)) {
+    if (debugSerial.available()) {
+      char c = debugSerial.read();
+
+      //Skip if about to enter status state
+      if (resultLen < (buffLen - 1)) {
+        //Check for CR        
+        seenCR = c == '\r';
+        if (seenCR) {
+          delay(10);
+          //Check for LF
+          if (debugSerial.peek() == '\n') {
+            debugSerial.read();
+          }
+        }
+        else {
+          buff[resultLen] = c;
+          resultLen++;
+        }
+      }
+      
+      //Reset Timeout if a character is seen
+      int32_t timeOut = millis() + LINE_TIMEOUT;
+    }
+  }
+  
+  //Add terminating 0
+  buff[resultLen] = 0;
+
+  return resultLen;
 }
 
 void showResult(ATCA_STATUS result)
