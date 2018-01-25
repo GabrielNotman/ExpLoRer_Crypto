@@ -2,11 +2,16 @@
 
 if [ $# -ne 2 ]
 then
-    echo "Correct usage: ./genSecret.sh <privateName> <publicName>"
+    privname="host"
+    pubname="device"   
 else
-    echo "Generating shared secret using: $1_priv.pem & $2_pub.pem"    
-    echo "Saving shared secreted to: $1_$2_secret.bin"
-    openssl pkeyutl -derive -inkey $1_priv.pem -peerkey $2_pub.pem -out $1_$2_secret.bin
-    echo "Hex dump of $1_$2_secret.bin: "
-    xxd -p -u -c256 < $1_$2_secret.bin
+    privname=$1
+    pubname=$2
 fi
+
+echo "Generating shared secret using: "$privname"_priv.pem & "$pubname"_pub.pem"    
+echo "Saving shared secreted to: "$privname"_"$pubname"_secret.bin"
+openssl pkeyutl -derive -inkey $privname"_priv.pem" -peerkey $pubname"_pub.pem" -out $privname"_"$pubname"_secret.bin"
+echo "Hex dump of "$privname"_"$pubname"_secret.bin: "
+xxd -p -u -c256 < $privname"_"$pubname"_secret.bin"
+
