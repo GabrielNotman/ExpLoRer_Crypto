@@ -124,12 +124,12 @@ void setup()
   debugSerial.println();
 
   //Request Other Public Key
-  uint8_t readBuff[ATCA_PUB_KEY_SIZE];
+  uint8_t pub_key_ext[ATCA_PUB_KEY_SIZE];
   debugSerial.println("Enter an external public key: ");
   debugSerial.println("Received: ");
-  uint16_t readLen = readLn((uint8_t*)readBuff, sizeof(readBuff));
+  uint16_t readLen = readLn((uint8_t*)pub_key_ext, sizeof(pub_key_ext));
   debugSerial.println("Hex check: ");
-  printRawHex(readBuff, readLen);
+  printRawHex(pub_key_ext, readLen);
   debugSerial.println(String("Recieved length: ") + String(readLen, DEC));
   debugSerial.println();
 
