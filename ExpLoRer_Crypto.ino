@@ -124,7 +124,14 @@ void setup()
   debugSerial.println();
 
   //Request Other Public Key
-  //Convert from Base64 and then back to test
+  uint8_t readBuff[ATCA_PUB_KEY_SIZE];
+  debugSerial.println("Enter an external public key: ");
+  debugSerial.println("Received: ");
+  uint16_t readLen = readLn((uint8_t*)readBuff, sizeof(readBuff));
+  debugSerial.println("Hex check: ");
+  printRawHex(readBuff, readLen);
+  debugSerial.println(String("Recieved length: ") + String(readLen, DEC));
+  debugSerial.println();
 
   //Generate private key in slot 1
   uint8_t pub_key_slot1[ATCA_PUB_KEY_SIZE];
@@ -208,8 +215,9 @@ void printRawHex(const uint8_t* buff, uint8_t len)
 
 uint16_t readLn(uint8_t* buff, uint16_t buffLen)
 {
-  int16_t resultLen = 0;
-  resultLen = 0;
+  uint16_t rawBuffSize = 256;
+  uint8_t rawBuff[rawBuffSize];
+  uint16_t rawBuffLen = 0;
   bool seenCR = false;
   
   //Timeout function
@@ -218,30 +226,55 @@ uint16_t readLn(uint8_t* buff, uint16_t buffLen)
     if (debugSerial.available()) {
       char c = debugSerial.read();
 
-      //Skip if about to enter status state
-      if (resultLen < (buffLen - 1)) {
-        //Check for CR        
-        seenCR = c == '\r';
-        if (seenCR) {
-          delay(10);
-          //Check for LF
-          if (debugSerial.peek() == '\n') {
-            debugSerial.read();
-          }
-        }
-        else {
-          buff[resultLen] = c;
-          resultLen++;
+      //Check for CR        
+      seenCR = c == '\r';
+      if (seenCR) {
+        delay(10);
+        //Check for LF
+        if (debugSerial.peek() == '\n') {
+          debugSerial.read();
         }
       }
-      
+      else {
+        if (rawBuffLen < (rawBuffSize - 1)) {
+          rawBuff[rawBuffLen] = c;
+          rawBuffLen++;
+          debugSerial.print(c);
+        }
+      }
+            
       //Reset Timeout if a character is seen
       int32_t timeOut = millis() + LINE_TIMEOUT;
     }
   }
-  
-  //Add terminating 0
-  buff[resultLen] = 0;
+  debugSerial.println();
+
+  //Convert to binary
+  uint16_t index = 0;
+  int16_t resultLen = 0;
+
+  //Ignore non hex characters and orphaned final odd character
+  while ((index < (rawBuffLen - 1)) && (resultLen < buffLen)) {
+    uint8_t high;
+    uint8_t low;
+
+    do {
+      high = rawBuff[index];
+      index++;
+    } while (!IS_HEX_CHAR(high) && (index < (rawBuffLen - 1)));
+
+    if (index < rawBuffLen) {
+      do {
+        low =  rawBuff[index];
+        index++;
+      } while (!IS_HEX_CHAR(low) && (index < rawBuffLen));
+
+      if (index <= rawBuffLen) {
+        buff[resultLen] = HEX_PAIR_TO_BYTE(high, low);
+        resultLen++;
+      }
+    }
+  }
 
   return resultLen;
 }
