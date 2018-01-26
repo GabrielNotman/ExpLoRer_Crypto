@@ -13,7 +13,7 @@ ATCAIfaceCfg *gCfg = &cfg_ateccx08a_i2c_default;
 #define debugBaud 57600
 #define debugDelay 10000
 
-#define LINE_TIMEOUT 30000
+#define LINE_TIMEOUT 300000
 
 void setup() 
 {
