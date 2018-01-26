@@ -171,7 +171,43 @@ void setup()
   debugSerial.println("Cipher text:");
   printRawHex(cipherECB, sizeof(cipherECB));
   debugSerial.println();
+
+  //Run AES-CBC encrypt test
+  char* messageCBC = "Test using AES-256 Cipher Block Chaining encryption";
+  messageLen = strlen(messageCBC);
+  blocks = (messageLen / AES_BLOCKLEN) + 1; // No pad option + (messageLen % AES_BLOCKLEN ? 1 : 0);
+  uint8_t cipherCBC[blocks * AES_BLOCKLEN];
+  memcpy(cipherCBC, messageCBC, sizeof(cipherCBC));
+  cipherCBC[messageLen] = 0;
+
+  debugSerial.println("AES-256-CBC encryption test");
+  debugSerial.print("Plain text: ");
+  debugSerial.println(messageCBC);
+
+  debugSerial.print("Adding PKCS7 padding:...");
+  padBytes = pkcs7_padding_pad_buffer(cipherCBC, messageLen, sizeof(cipherCBC), AES_BLOCKLEN);
+  debugSerial.println((padBytes == 0 ? "FAIL" : (String("SUCCESS ") + String(padBytes, DEC))));
+
+  //Encrypt using TRNG data for IV
+  uint8_t iv[AES_BLOCKLEN];
+  memcpy(iv, random_num, sizeof(iv));
   
+  AES_init_ctx_iv(&ctx, shared_sec, iv);
+  AES_CBC_encrypt_buffer(&ctx, cipherCBC, sizeof(cipherCBC));  
+  
+  debugSerial.println("Cipher text:");
+  printRawHex(cipherCBC, sizeof(cipherCBC));
+  debugSerial.println("IV:");
+  printRawHex(iv, sizeof(iv));
+  debugSerial.println();
+  
+  //debugSerial.println(String("Testing AES-256-CBC plain text: '") + String(CBC_TEST) + String("'"));
+  //debugSerial.println("Generated AES-256-CBC cipher text:");
+  
+  //AES_init_ctx_iv(&ctx, shared_sec, CBC_IV);
+  //debugSerial.println("Using initialisation vector:");
+  //printRawHex(CBC_IV, sizeof(CBC_IV));
+ 
   //Run AES on test Message
   //Output AES encrypted Message as base64
   
