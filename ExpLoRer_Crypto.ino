@@ -1,6 +1,11 @@
+#include "aes.hpp"
 #include "atca_basic.h"
 #include "test_config.h"
 #include "Utils.h"
+
+extern "C" {
+#include "pkcs7_padding.h"
+}
 
 ATCAIfaceCfg *gCfg = &cfg_ateccx08a_i2c_default;
 
@@ -141,6 +146,32 @@ void setup()
   printRawHex(shared_sec, sizeof(shared_sec));
   debugSerial.println();
 
+  //Run AES-ECB test
+  char* messageECB = "AES-256-ECB encryption test";
+  const uint8_t messageLen = strlen(messageECB);
+  const uint8_t blocks = (messageLen / AES_BLOCKLEN) + 1; // No pad option + (messageLen % AES_BLOCKLEN ? 1 : 0);
+  uint8_t cipherECB[blocks * AES_BLOCKLEN];
+  memcpy(cipherECB, messageECB, sizeof(cipherECB));
+  cipherECB[messageLen] = 0;
+
+  debugSerial.println("AES-256-ECB encryption test");
+  debugSerial.print("Plain text: ");
+  debugSerial.println(messageECB);
+
+  debugSerial.print("Adding PKCS7 padding:...");
+  uint8_t padBytes = pkcs7_padding_pad_buffer(cipherECB, messageLen, sizeof(cipherECB), AES_BLOCKLEN);
+  debugSerial.println((padBytes == 0 ? "FAIL" : (String("SUCCESS ") + String(padBytes, DEC))));
+
+  //Encrypt
+  struct AES_ctx ctx;
+  AES_init_ctx(&ctx, shared_sec);
+  for (uint8_t i = 0; i < blocks; i++) {
+    AES_ECB_encrypt(&ctx, &cipherECB[i * AES_BLOCKLEN]);  
+  }
+  debugSerial.println("Cipher text:");
+  printRawHex(cipherECB, sizeof(cipherECB));
+  debugSerial.println();
+  
   //Run AES on test Message
   //Output AES encrypted Message as base64
   
