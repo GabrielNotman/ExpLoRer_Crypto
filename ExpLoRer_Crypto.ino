@@ -109,6 +109,16 @@ void setup()
   printHex(random_num, sizeof(random_num), 16);
   debugSerial.println();
   
+  //Request Other Public Key
+  uint8_t pub_key_ext[ATCA_PUB_KEY_SIZE];
+  debugSerial.println("Enter an external public key: ");
+  debugSerial.println("Received: ");
+  uint16_t readLen = readLn((uint8_t*)pub_key_ext, sizeof(pub_key_ext));
+  debugSerial.println("Hex check: ");
+  printRawHex(pub_key_ext, readLen);
+  debugSerial.println(String("Recieved length: ") + String(readLen, DEC));
+  debugSerial.println();
+
   //Generate private key in slot 0
   uint8_t pub_key_slot0[ATCA_PUB_KEY_SIZE];
   debugSerial.print("Generating private key in slot0:...");
@@ -121,16 +131,6 @@ void setup()
   debugSerial.print("Querying public key from secret key in slot 0:...");
   showResult(atcab_get_pubkey(0, pub_key_slot0));
   printRawHex(pub_key_slot0, sizeof(pub_key_slot0));
-  debugSerial.println();
-
-  //Request Other Public Key
-  uint8_t pub_key_ext[ATCA_PUB_KEY_SIZE];
-  debugSerial.println("Enter an external public key: ");
-  debugSerial.println("Received: ");
-  uint16_t readLen = readLn((uint8_t*)pub_key_ext, sizeof(pub_key_ext));
-  debugSerial.println("Hex check: ");
-  printRawHex(pub_key_ext, readLen);
-  debugSerial.println(String("Recieved length: ") + String(readLen, DEC));
   debugSerial.println();
 
   //Generate shared secret 0 -> external
