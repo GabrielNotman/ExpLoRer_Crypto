@@ -119,9 +119,9 @@ void setup()
   debugSerial.println("Enter an external public key: ");
   debugSerial.println("Received: ");
   uint16_t readLen = readLn((uint8_t*)pub_key_ext, sizeof(pub_key_ext));
-  debugSerial.println("Hex check: ");
-  printRawHex(pub_key_ext, readLen);
-  debugSerial.println(String("Recieved length: ") + String(readLen, DEC));
+  //debugSerial.println("Hex check: ");
+  //printRawHex(pub_key_ext, readLen);
+  //debugSerial.println(String("Recieved length: ") + String(readLen, DEC));
   debugSerial.println();
 
   //Generate private key in slot 0
@@ -203,12 +203,13 @@ void setup()
 
   //Run AES-ECB decrypt test
   uint8_t ecb_decrypt_buffer[128];
+  debugSerial.println("AES-256-ECB decryption test");
   debugSerial.println("Enter ECB cipher text (MAX 8 blocks): ");
-  debugSerial.println("Received: ");
+  debugSerial.print("Received: ");
   readLen = readLn((uint8_t*)ecb_decrypt_buffer, sizeof(ecb_decrypt_buffer));
-  debugSerial.println("Hex check: ");
-  printRawHex(ecb_decrypt_buffer, readLen);
-  debugSerial.println(String("Recieved length: ") + String(readLen, DEC));
+  //debugSerial.println("Hex check: ");
+  //printRawHex(ecb_decrypt_buffer, readLen);
+  //debugSerial.println(String("Recieved length: ") + String(readLen, DEC));
   
   //Decrypt
   AES_init_ctx(&ctx, shared_sec);
@@ -225,21 +226,22 @@ void setup()
   debugSerial.println();
 
   //Run AES-CBC decrypt test
+  debugSerial.println("AES-256-CBC decryption test");
   debugSerial.println("Enter IV: ");
-  debugSerial.println("Received: ");
+  debugSerial.print("Received: ");
   memset(iv, 0, sizeof(iv));
   readLen = readLn((uint8_t*)iv, sizeof(iv));
-  debugSerial.println("Hex check: ");
-  printRawHex(iv, readLen);
-  debugSerial.println(String("Recieved length: ") + String(readLen, DEC));
+  //debugSerial.println("Hex check: ");
+  //printRawHex(iv, readLen);
+  //debugSerial.println(String("Recieved length: ") + String(readLen, DEC));
    
   uint8_t cbc_decrypt_buffer[128];
   debugSerial.println("Enter CBC cipher text (MAX 8 blocks): ");
-  debugSerial.println("Received: ");
+  debugSerial.print("Received: ");
   readLen = readLn((uint8_t*)cbc_decrypt_buffer, sizeof(cbc_decrypt_buffer));
-  debugSerial.println("Hex check: ");
-  printRawHex(cbc_decrypt_buffer, readLen);
-  debugSerial.println(String("Recieved length: ") + String(readLen, DEC));
+  //debugSerial.println("Hex check: ");
+  //printRawHex(cbc_decrypt_buffer, readLen);
+  //debugSerial.println(String("Recieved length: ") + String(readLen, DEC));
   
   //Decrypt
   AES_init_ctx_iv(&ctx, shared_sec, iv);
