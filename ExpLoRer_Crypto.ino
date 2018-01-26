@@ -194,11 +194,12 @@ void setup()
   
   AES_init_ctx_iv(&ctx, shared_sec, iv);
   AES_CBC_encrypt_buffer(&ctx, cipherCBC, sizeof(cipherCBC));  
-  
+
+  debugSerial.print("IV:");
+  printRawHex(iv, sizeof(iv));
   debugSerial.println("Cipher text:");
   printRawHex(cipherCBC, sizeof(cipherCBC));
-  debugSerial.println("IV:");
-  printRawHex(iv, sizeof(iv));
+  debugSerial.println();
   debugSerial.println();
   
   //debugSerial.println(String("Testing AES-256-CBC plain text: '") + String(CBC_TEST) + String("'"));
