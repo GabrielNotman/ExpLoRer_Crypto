@@ -146,10 +146,10 @@ void setup()
   printRawHex(shared_sec, sizeof(shared_sec));
   debugSerial.println();
 
-  //Run AES-ECB test
-  char* messageECB = "AES-256-ECB encryption test";
-  const uint8_t messageLen = strlen(messageECB);
-  const uint8_t blocks = (messageLen / AES_BLOCKLEN) + 1; // No pad option + (messageLen % AES_BLOCKLEN ? 1 : 0);
+  //Run AES-ECB encrypt test
+  char* messageECB = "Test using AES-256 Electronic Code Book encryption";
+  uint8_t messageLen = strlen(messageECB);
+  uint8_t blocks = (messageLen / AES_BLOCKLEN) + 1; // No pad option + (messageLen % AES_BLOCKLEN ? 1 : 0);
   uint8_t cipherECB[blocks * AES_BLOCKLEN];
   memcpy(cipherECB, messageECB, sizeof(cipherECB));
   cipherECB[messageLen] = 0;
