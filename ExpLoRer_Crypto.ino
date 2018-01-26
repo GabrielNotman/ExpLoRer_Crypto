@@ -200,6 +200,28 @@ void setup()
   debugSerial.println("Cipher text:");
   printRawHex(cipherCBC, sizeof(cipherCBC));
   debugSerial.println();
+
+  //Run AES-ECB decrypt test
+  uint8_t ecb_decrypt_buffer[128];
+  debugSerial.println("Enter ECB cipher text (MAX 8 blocks): ");
+  debugSerial.println("Received: ");
+  readLen = readLn((uint8_t*)ecb_decrypt_buffer, sizeof(ecb_decrypt_buffer));
+  debugSerial.println("Hex check: ");
+  printRawHex(ecb_decrypt_buffer, readLen);
+  debugSerial.println(String("Recieved length: ") + String(readLen, DEC));
+  
+  //Decrypt
+  AES_init_ctx(&ctx, shared_sec);
+  blocks = readLen / AES_BLOCKLEN;
+  for (uint8_t i = 0; i < blocks; i++) {
+    AES_ECB_decrypt(&ctx, &ecb_decrypt_buffer[i * AES_BLOCKLEN]);  
+  }
+  
+  //Calculate padding
+  padBytes = pkcs7_padding_data_length(ecb_decrypt_buffer, readLen, AES_BLOCKLEN);
+  ecb_decrypt_buffer[padBytes] = 0;
+  debugSerial.print("Decrypted plain text: ");
+  debugSerial.println((char*)ecb_decrypt_buffer);
   debugSerial.println();
   
   //debugSerial.println(String("Testing AES-256-CBC plain text: '") + String(CBC_TEST) + String("'"));
