@@ -251,20 +251,6 @@ void setup()
   debugSerial.print("Decrypted plain text: ");
   debugSerial.println((char*)cbc_decrypt_buffer);
   debugSerial.println();
-  
-  //debugSerial.println(String("Testing AES-256-CBC plain text: '") + String(CBC_TEST) + String("'"));
-  //debugSerial.println("Generated AES-256-CBC cipher text:");
-  
-  //AES_init_ctx_iv(&ctx, shared_sec, CBC_IV);
-  //debugSerial.println("Using initialisation vector:");
-  //printRawHex(CBC_IV, sizeof(CBC_IV));
- 
-  //Run AES on test Message
-  //Output AES encrypted Message as base64
-  
-  //Ask for encrypted input
-  //Decrypt input
-  //Display encrypted and decrypted version
 }
 
 void loop() 
