@@ -223,6 +223,34 @@ void setup()
   debugSerial.print("Decrypted plain text: ");
   debugSerial.println((char*)ecb_decrypt_buffer);
   debugSerial.println();
+
+  //Run AES-CBC decrypt test
+  debugSerial.println("Enter IV: ");
+  debugSerial.println("Received: ");
+  memset(iv, 0, sizeof(iv));
+  readLen = readLn((uint8_t*)iv, sizeof(iv));
+  debugSerial.println("Hex check: ");
+  printRawHex(iv, readLen);
+  debugSerial.println(String("Recieved length: ") + String(readLen, DEC));
+   
+  uint8_t cbc_decrypt_buffer[128];
+  debugSerial.println("Enter CBC cipher text (MAX 8 blocks): ");
+  debugSerial.println("Received: ");
+  readLen = readLn((uint8_t*)cbc_decrypt_buffer, sizeof(cbc_decrypt_buffer));
+  debugSerial.println("Hex check: ");
+  printRawHex(cbc_decrypt_buffer, readLen);
+  debugSerial.println(String("Recieved length: ") + String(readLen, DEC));
+  
+  //Decrypt
+  AES_init_ctx_iv(&ctx, shared_sec, iv);
+  AES_CBC_decrypt_buffer(&ctx, cbc_decrypt_buffer, readLen);  
+  
+  //Calculate padding
+  padBytes = pkcs7_padding_data_length(cbc_decrypt_buffer, readLen, AES_BLOCKLEN);
+  cbc_decrypt_buffer[padBytes] = 0;
+  debugSerial.print("Decrypted plain text: ");
+  debugSerial.println((char*)cbc_decrypt_buffer);
+  debugSerial.println();
   
   //debugSerial.println(String("Testing AES-256-CBC plain text: '") + String(CBC_TEST) + String("'"));
   //debugSerial.println("Generated AES-256-CBC cipher text:");
