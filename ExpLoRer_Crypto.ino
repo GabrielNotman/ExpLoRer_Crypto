@@ -52,7 +52,7 @@ void setup()
   bool isLocked = false;
   debugSerial.print("Reading configuration lock status:...");
   showResult(atcab_is_locked(LOCK_ZONE_CONFIG, &isLocked));
-  debugSerial.print("The configuration zone is ");
+  debugSerial.print("The configuration zone is:...");
   debugSerial.println((isLocked ? "LOCKED" : "UNLOCKED"));
   debugSerial.println();
   
@@ -92,7 +92,7 @@ void setup()
   isLocked = false;
   debugSerial.print("Reading data zone lock status:...");
   showResult(atcab_is_locked(LOCK_ZONE_DATA, &isLocked));
-  debugSerial.print("The data zone is ");
+  debugSerial.print("The data zone is:...");
   debugSerial.println((isLocked ? "LOCKED" : "UNLOCKED"));
   debugSerial.println();
   
