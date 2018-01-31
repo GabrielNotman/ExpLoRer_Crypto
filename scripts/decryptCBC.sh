@@ -1,6 +1,6 @@
 #!/bin/bash
 
-echo "Testing decrypting with AES-256 ECB mode"
+echo "Testing decrypting with AES-256 CBC mode"
 echo -n "Enter cipher HEX: "
 read cipher
 echo $cipher | xxd -r -p > cipher.tmp
