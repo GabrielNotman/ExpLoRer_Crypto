@@ -124,25 +124,25 @@ void setup()
   //debugSerial.println(String("Recieved length: ") + String(readLen, DEC));
   debugSerial.println();
 
-  //Generate private key in slot 0
-  uint8_t pub_key_slot0[ATCA_PUB_KEY_SIZE];
-  debugSerial.print("Generating private key in slot0:...");
-  showResult(atcab_genkey(0, pub_key_slot0));
+  //Generate private key in slot 2
+  uint8_t pub_key_slot2[ATCA_PUB_KEY_SIZE];
+  debugSerial.print("Generating private key in slot2:...");
+  showResult(atcab_genkey(2, pub_key_slot2));
   debugSerial.println("Responded with public key:");
-  printHex(pub_key_slot0, sizeof(pub_key_slot0), 16);
+  printHex(pub_key_slot2, sizeof(pub_key_slot2), 16);
   debugSerial.println();
 
-  //Query public key of slot 0
-  debugSerial.print("Querying public key from secret key in slot 0:...");
-  showResult(atcab_get_pubkey(0, pub_key_slot0));
-  printRawHex(pub_key_slot0, sizeof(pub_key_slot0));
+  //Query public key of slot 2
+  debugSerial.print("Querying public key from secret key in slot2:...");
+  showResult(atcab_get_pubkey(2, pub_key_slot2));
+  printRawHex(pub_key_slot2, sizeof(pub_key_slot2));
   debugSerial.println();
 
-  //Generate shared secret 0 -> external
+  //Generate shared secret 2 -> external
   uint8_t shared_sec[ATCA_KEY_SIZE];
   memset(shared_sec, 0, sizeof(shared_sec));
-  debugSerial.print("Generating shared secret 0->external:...");
-  showResult(atcab_ecdh(0, pub_key_ext, shared_sec));
+  debugSerial.print("Generating shared secret 2->external:...");
+  showResult(atcab_ecdh(2, pub_key_ext, shared_sec));
   printRawHex(shared_sec, sizeof(shared_sec));
   debugSerial.println();
 
