@@ -1,7 +1,12 @@
 # ExpLoRer_Crypto
-ExpLoRer Crypto Test
 
-This example locks both the ATECC508a configuration and data zones. This is required for most of the functionality tested. These processes however, are irreversible. Once locked the configuration zone cannot be modified and the settings for the invidual slots cannot be changed. 
+# Warning
+
+This example locks both the ATECC508a _configuration_ and _data_ zones. This is required for most of the functionality tested. These processes however, are irreversible. Once locked the configuration cannot be modified and the settings for the individual slots cannot be changed.
+
+Therefore care must be taken in defining the specific configuration that meets the functional requirements for your application.
+
+The configuration used here is the _w25_test_ecc_configdata_ from the test code that ships with CryptoAuthLib.
 
 Disclaimer (from the included MIT License):
 
